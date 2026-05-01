@@ -1,0 +1,38 @@
+MIT License
+
+Copyright (c) 2026 Kushagra Gupta
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Dataset Attribution
+
+This project uses the UCI Parkinson's Disease dataset:
+Little, M.A., McSharry, P.E., Roberts, S.J., Costello, D.A.E., Moroz, I.M. (2007).
+Exploiting Nonlinear Recurrence and Fractal Scaling Properties for Voice Disorder Detection.
+BioMedical Engineering OnLine, 6(23). https://doi.org/10.1186/1475-925X-6-23
+
+The dataset is freely available from the UCI Machine Learning Repository under an open license.
+
+## Medical Disclaimer
+
+This software is a **research and educational demonstration only**. It is **not a
+diagnostic device** and must **not** be used to make clinical decisions. Consult a
+qualified neurologist for any medical concern.

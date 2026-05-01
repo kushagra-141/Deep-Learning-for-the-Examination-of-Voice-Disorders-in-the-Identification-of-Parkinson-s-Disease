@@ -1,0 +1,88 @@
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+.env/
+pip-wheel-metadata/
+*.whl
+.Python
+
+# Coverage / test artefacts
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.prof
+
+# uv
+uv.lock.bak
+
+# ── Node / Frontend ───────────────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/build/
+frontend/coverage/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# ── Environment / Secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+*.log
+docker-compose.override.yml
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── IDE / Editor ──────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ── ML artefacts ──────────────────────────────────────────────────────────────
+# Trained model files are committed only from CI artifacts; local runs go here
+backend/models/*.joblib
+backend/models/manifest.json
+backend/data/*.db
+backend/data/uploads/
+!backend/data/parkinsons.data
+
+# ── Terraform ─────────────────────────────────────────────────────────────────
+infra/terraform/.terraform/
+infra/terraform/terraform.tfstate
+infra/terraform/terraform.tfstate.backup
+*.tfvars
+!*.tfvars.example
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+*.bak
+*.orig
+*.tmp

@@ -1,0 +1,17 @@
+# Global: every file requires a review from @kushagra
+* @kushagra
+
+# Docs: architecture decisions require explicit review
+/docs/ @kushagra
+/docs/adr/ @kushagra
+
+# Infrastructure: changes to Dockerfiles, CI, and deploy scripts require review
+/infra/ @kushagra
+/.github/ @kushagra
+/deploy/ @kushagra
+
+# Backend: ML pipeline and API changes
+/backend/ @kushagra
+
+# Frontend: UI changes
+/frontend/ @kushagra

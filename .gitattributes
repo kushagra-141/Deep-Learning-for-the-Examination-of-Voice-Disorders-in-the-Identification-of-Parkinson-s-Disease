@@ -1,0 +1,52 @@
+# Normalize line endings to LF on checkout for cross-platform consistency
+* text=auto eol=lf
+
+# Force LF for shell scripts (critical for Docker + Linux deploy targets)
+*.sh text eol=lf
+*.bash text eol=lf
+Makefile text eol=lf
+
+# Force LF for Python source
+*.py text eol=lf
+
+# Force LF for TS/JS/JSON/YAML
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
+*.env text eol=lf
+*.example text eol=lf
+Caddyfile text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+
+# Binary — do not mangle
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.joblib binary
+*.pkl binary
+*.db binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.webm binary
