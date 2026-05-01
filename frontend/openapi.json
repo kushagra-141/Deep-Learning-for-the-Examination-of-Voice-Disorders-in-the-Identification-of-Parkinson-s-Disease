@@ -1,0 +1,2014 @@
+{
+  "components": {
+    "schemas": {
+      "BatchJobCreated": {
+        "properties": {
+          "job_id": {
+            "title": "Job Id",
+            "type": "string"
+          },
+          "status_url": {
+            "title": "Status Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id",
+          "status_url"
+        ],
+        "title": "BatchJobCreated",
+        "type": "object"
+      },
+      "BatchJobStatus": {
+        "properties": {
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "progress": {
+            "description": "0..1",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Progress",
+            "type": "number"
+          },
+          "row_count": {
+            "minimum": 0.0,
+            "title": "Row Count",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "progress",
+          "row_count"
+        ],
+        "title": "BatchJobStatus",
+        "type": "object"
+      },
+      "Body_create_batch_api_v1_batch__post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_create_batch_api_v1_batch__post",
+        "type": "object"
+      },
+      "Body_predict_audio_api_v1_audio_predict_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_predict_audio_api_v1_audio_predict_post",
+        "type": "object"
+      },
+      "BoxplotStats": {
+        "properties": {
+          "max": {
+            "title": "Max",
+            "type": "number"
+          },
+          "mean": {
+            "title": "Mean",
+            "type": "number"
+          },
+          "median": {
+            "title": "Median",
+            "type": "number"
+          },
+          "min": {
+            "title": "Min",
+            "type": "number"
+          },
+          "q1": {
+            "title": "Q1",
+            "type": "number"
+          },
+          "q3": {
+            "title": "Q3",
+            "type": "number"
+          },
+          "std": {
+            "title": "Std",
+            "type": "number"
+          }
+        },
+        "required": [
+          "min",
+          "q1",
+          "median",
+          "q3",
+          "max",
+          "mean",
+          "std"
+        ],
+        "title": "BoxplotStats",
+        "type": "object"
+      },
+      "ClassCounts": {
+        "properties": {
+          "healthy": {
+            "description": "status=0 row count",
+            "minimum": 0.0,
+            "title": "Healthy",
+            "type": "integer"
+          },
+          "parkinsons": {
+            "description": "status=1 row count",
+            "minimum": 0.0,
+            "title": "Parkinsons",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "healthy",
+          "parkinsons"
+        ],
+        "title": "ClassCounts",
+        "type": "object"
+      },
+      "CorrelationMatrix": {
+        "properties": {
+          "features": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Features",
+            "type": "array"
+          },
+          "matrix": {
+            "items": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "title": "Matrix",
+            "type": "array"
+          }
+        },
+        "required": [
+          "features",
+          "matrix"
+        ],
+        "title": "CorrelationMatrix",
+        "type": "object"
+      },
+      "DatasetStats": {
+        "properties": {
+          "by_class": {
+            "$ref": "#/components/schemas/ClassCounts"
+          },
+          "class_balance_pct": {
+            "description": "% Parkinson's",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Class Balance Pct",
+            "type": "number"
+          },
+          "feature_count": {
+            "minimum": 0.0,
+            "title": "Feature Count",
+            "type": "integer"
+          },
+          "total": {
+            "minimum": 0.0,
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "by_class",
+          "feature_count",
+          "class_balance_pct"
+        ],
+        "title": "DatasetStats",
+        "type": "object"
+      },
+      "ExplainRequest": {
+        "properties": {
+          "features": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "description": "The 22 acoustic features used for the prediction.",
+            "title": "Features",
+            "type": "object"
+          },
+          "input_mode": {
+            "default": "manual",
+            "description": "Whether the features were manually entered or extracted from audio.",
+            "title": "Input Mode",
+            "type": "string"
+          },
+          "probability": {
+            "description": "The ensemble probability of Parkinson's disease.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Probability",
+            "type": "number"
+          }
+        },
+        "required": [
+          "features",
+          "probability"
+        ],
+        "title": "ExplainRequest",
+        "type": "object"
+      },
+      "FeatureDistribution": {
+        "properties": {
+          "bins": {
+            "description": "Histogram bin edges (length = counts+1)",
+            "items": {
+              "type": "number"
+            },
+            "title": "Bins",
+            "type": "array"
+          },
+          "by_class": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/BoxplotStats"
+            },
+            "description": "Boxplot stats keyed by 'healthy' / 'parkinsons'",
+            "title": "By Class",
+            "type": "object"
+          },
+          "counts": {
+            "description": "Histogram counts per bin",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Counts",
+            "type": "array"
+          },
+          "feature": {
+            "title": "Feature",
+            "type": "string"
+          }
+        },
+        "required": [
+          "feature",
+          "bins",
+          "counts",
+          "by_class"
+        ],
+        "title": "FeatureDistribution",
+        "type": "object"
+      },
+      "FeedbackIn": {
+        "properties": {
+          "comment": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          },
+          "prediction_id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Prediction Id",
+            "type": "string"
+          },
+          "rating": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Rating",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "prediction_id",
+          "rating"
+        ],
+        "title": "FeedbackIn",
+        "type": "object"
+      },
+      "FeedbackOut": {
+        "properties": {
+          "feedback_id": {
+            "title": "Feedback Id",
+            "type": "string"
+          },
+          "received": {
+            "default": true,
+            "title": "Received",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "feedback_id"
+        ],
+        "title": "FeedbackOut",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "LoginIn": {
+        "properties": {
+          "password": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginIn",
+        "type": "object"
+      },
+      "ModelPredictionOut": {
+        "properties": {
+          "label": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Label",
+            "type": "integer"
+          },
+          "model_name": {
+            "title": "Model Name",
+            "type": "string"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "probability": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Probability",
+            "type": "number"
+          },
+          "shap_top": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ShapContribution"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shap Top"
+          }
+        },
+        "required": [
+          "model_name",
+          "model_version",
+          "label",
+          "probability"
+        ],
+        "title": "ModelPredictionOut",
+        "type": "object"
+      },
+      "PCAPoint": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "integer"
+          },
+          "x": {
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "title": "Y",
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y",
+          "label"
+        ],
+        "title": "PCAPoint",
+        "type": "object"
+      },
+      "PCAProjection": {
+        "properties": {
+          "components": {
+            "description": "Number of components in returned points",
+            "maximum": 3.0,
+            "minimum": 2.0,
+            "title": "Components",
+            "type": "integer"
+          },
+          "explained_variance": {
+            "description": "Variance ratio per component",
+            "items": {
+              "type": "number"
+            },
+            "title": "Explained Variance",
+            "type": "array"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/PCAPoint"
+            },
+            "title": "Points",
+            "type": "array"
+          }
+        },
+        "required": [
+          "components",
+          "explained_variance",
+          "points"
+        ],
+        "title": "PCAProjection",
+        "type": "object"
+      },
+      "PredictionRequest": {
+        "properties": {
+          "features": {
+            "$ref": "#/components/schemas/VoiceFeatures"
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "enum": [
+                  "knn",
+                  "svm",
+                  "decision_tree",
+                  "bagging",
+                  "lightgbm",
+                  "adaboost",
+                  "random_forest",
+                  "xgboost",
+                  "pca_rf",
+                  "ensemble"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Name"
+          }
+        },
+        "required": [
+          "features"
+        ],
+        "title": "PredictionRequest",
+        "type": "object"
+      },
+      "PredictionResponse": {
+        "properties": {
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "disclaimer": {
+            "default": "Research and educational demonstration only. NOT a diagnostic device. Consult a qualified neurologist for any medical concern.",
+            "title": "Disclaimer",
+            "type": "string"
+          },
+          "ensemble": {
+            "$ref": "#/components/schemas/ModelPredictionOut"
+          },
+          "input_mode": {
+            "enum": [
+              "manual",
+              "audio",
+              "batch"
+            ],
+            "title": "Input Mode",
+            "type": "string"
+          },
+          "per_model": {
+            "items": {
+              "$ref": "#/components/schemas/ModelPredictionOut"
+            },
+            "title": "Per Model",
+            "type": "array"
+          },
+          "prediction_id": {
+            "title": "Prediction Id",
+            "type": "string"
+          },
+          "primary_model": {
+            "title": "Primary Model",
+            "type": "string"
+          }
+        },
+        "required": [
+          "prediction_id",
+          "created_at",
+          "input_mode",
+          "per_model",
+          "ensemble",
+          "primary_model"
+        ],
+        "title": "PredictionResponse",
+        "type": "object"
+      },
+      "ShapContribution": {
+        "properties": {
+          "feature": {
+            "title": "Feature",
+            "type": "string"
+          },
+          "shap": {
+            "title": "Shap",
+            "type": "number"
+          },
+          "value": {
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "feature",
+          "value",
+          "shap"
+        ],
+        "title": "ShapContribution",
+        "type": "object"
+      },
+      "TokenOut": {
+        "properties": {
+          "access_token": {
+            "title": "Access Token",
+            "type": "string"
+          },
+          "expires_at": {
+            "title": "Expires At",
+            "type": "string"
+          },
+          "token_type": {
+            "default": "bearer",
+            "title": "Token Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_token",
+          "expires_at"
+        ],
+        "title": "TokenOut",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VoiceFeatures": {
+        "additionalProperties": false,
+        "description": "22 acoustic features extracted from a voice recording.\n\nField aliases match the UCI dataset column names exactly.\nRanges are dataset min/max \u00b1 20 % (rounded), validated server-side.",
+        "properties": {
+          "D2": {
+            "examples": [
+              2.31
+            ],
+            "maximum": 4.0,
+            "minimum": 0.0,
+            "title": "D2",
+            "type": "number"
+          },
+          "DFA": {
+            "examples": [
+              0.718
+            ],
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Dfa",
+            "type": "number"
+          },
+          "HNR": {
+            "examples": [
+              22.4
+            ],
+            "maximum": 40.0,
+            "minimum": 5.0,
+            "title": "Hnr",
+            "type": "number"
+          },
+          "Jitter:DDP": {
+            "examples": [
+              0.0102
+            ],
+            "maximum": 0.1,
+            "minimum": 0.0,
+            "title": "Jitter:Ddp",
+            "type": "number"
+          },
+          "MDVP:APQ": {
+            "examples": [
+              0.024
+            ],
+            "maximum": 0.15,
+            "minimum": 0.0,
+            "title": "Mdvp:Apq",
+            "type": "number"
+          },
+          "MDVP:Fhi(Hz)": {
+            "examples": [
+              197.1
+            ],
+            "maximum": 600.0,
+            "minimum": 50.0,
+            "title": "Mdvp:Fhi(Hz)",
+            "type": "number"
+          },
+          "MDVP:Flo(Hz)": {
+            "examples": [
+              116.32
+            ],
+            "maximum": 300.0,
+            "minimum": 50.0,
+            "title": "Mdvp:Flo(Hz)",
+            "type": "number"
+          },
+          "MDVP:Fo(Hz)": {
+            "examples": [
+              154.23
+            ],
+            "maximum": 300.0,
+            "minimum": 50.0,
+            "title": "Mdvp:Fo(Hz)",
+            "type": "number"
+          },
+          "MDVP:Jitter(%)": {
+            "examples": [
+              0.0067
+            ],
+            "maximum": 0.05,
+            "minimum": 0.0,
+            "title": "Mdvp:Jitter(%)",
+            "type": "number"
+          },
+          "MDVP:Jitter(Abs)": {
+            "examples": [
+              4e-05
+            ],
+            "maximum": 0.001,
+            "minimum": 0.0,
+            "title": "Mdvp:Jitter(Abs)",
+            "type": "number"
+          },
+          "MDVP:PPQ": {
+            "examples": [
+              0.0038
+            ],
+            "maximum": 0.04,
+            "minimum": 0.0,
+            "title": "Mdvp:Ppq",
+            "type": "number"
+          },
+          "MDVP:RAP": {
+            "examples": [
+              0.0034
+            ],
+            "maximum": 0.03,
+            "minimum": 0.0,
+            "title": "Mdvp:Rap",
+            "type": "number"
+          },
+          "MDVP:Shimmer": {
+            "examples": [
+              0.029
+            ],
+            "maximum": 0.2,
+            "minimum": 0.0,
+            "title": "Mdvp:Shimmer",
+            "type": "number"
+          },
+          "MDVP:Shimmer(dB)": {
+            "examples": [
+              0.282
+            ],
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "title": "Mdvp:Shimmer(Db)",
+            "type": "number"
+          },
+          "NHR": {
+            "examples": [
+              0.0162
+            ],
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Nhr",
+            "type": "number"
+          },
+          "PPE": {
+            "examples": [
+              0.207
+            ],
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Ppe",
+            "type": "number"
+          },
+          "RPDE": {
+            "examples": [
+              0.4985
+            ],
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Rpde",
+            "type": "number"
+          },
+          "Shimmer:APQ3": {
+            "examples": [
+              0.0145
+            ],
+            "maximum": 0.1,
+            "minimum": 0.0,
+            "title": "Shimmer:Apq3",
+            "type": "number"
+          },
+          "Shimmer:APQ5": {
+            "examples": [
+              0.0179
+            ],
+            "maximum": 0.1,
+            "minimum": 0.0,
+            "title": "Shimmer:Apq5",
+            "type": "number"
+          },
+          "Shimmer:DDA": {
+            "examples": [
+              0.0436
+            ],
+            "maximum": 0.3,
+            "minimum": 0.0,
+            "title": "Shimmer:Dda",
+            "type": "number"
+          },
+          "spread1": {
+            "examples": [
+              -5.94
+            ],
+            "maximum": 0.0,
+            "minimum": -10.0,
+            "title": "Spread1",
+            "type": "number"
+          },
+          "spread2": {
+            "examples": [
+              0.226
+            ],
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Spread2",
+            "type": "number"
+          }
+        },
+        "required": [
+          "MDVP:Fo(Hz)",
+          "MDVP:Fhi(Hz)",
+          "MDVP:Flo(Hz)",
+          "MDVP:Jitter(%)",
+          "MDVP:Jitter(Abs)",
+          "MDVP:RAP",
+          "MDVP:PPQ",
+          "Jitter:DDP",
+          "MDVP:Shimmer",
+          "MDVP:Shimmer(dB)",
+          "Shimmer:APQ3",
+          "Shimmer:APQ5",
+          "MDVP:APQ",
+          "Shimmer:DDA",
+          "NHR",
+          "HNR",
+          "RPDE",
+          "DFA",
+          "spread1",
+          "spread2",
+          "D2",
+          "PPE"
+        ],
+        "title": "VoiceFeatures",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Parkinson's Voice Detection API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/admin/audit-log": {
+      "get": {
+        "operationId": "list_audit_log_api_v1_admin_audit_log_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "cookie",
+            "name": "access_token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response List Audit Log Api V1 Admin Audit Log Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Audit Log",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/feedback": {
+      "get": {
+        "operationId": "list_feedback_api_v1_admin_feedback_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "cookie",
+            "name": "access_token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response List Feedback Api V1 Admin Feedback Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Feedback",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/me": {
+      "get": {
+        "operationId": "me_api_v1_admin_me_get",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "access_token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Me Api V1 Admin Me Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Me",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/predictions": {
+      "get": {
+        "operationId": "list_predictions_api_v1_admin_predictions_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "cookie",
+            "name": "access_token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response List Predictions Api V1 Admin Predictions Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Predictions",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/analytics/correlation": {
+      "get": {
+        "description": "22x22 Pearson correlation matrix on the bundled dataset.",
+        "operationId": "correlation_api_v1_analytics_correlation_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorrelationMatrix"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Correlation",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/analytics/dataset-stats": {
+      "get": {
+        "description": "Total rows, per-class counts, and class balance (% Parkinson's).",
+        "operationId": "dataset_stats_api_v1_analytics_dataset_stats_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetStats"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Dataset Stats",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/analytics/feature/{name}": {
+      "get": {
+        "description": "Histogram + per-class boxplot stats for one feature.\n\n`name` must be one of the canonical UCI column names (e.g. `MDVP:Fo(Hz)`).",
+        "operationId": "feature_distribution_api_v1_analytics_feature__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bins",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "maximum": 100,
+              "minimum": 5,
+              "title": "Bins",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureDistribution"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Feature Distribution",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/analytics/pca": {
+      "get": {
+        "description": "PCA scatter of the dataset, points labeled by class.",
+        "operationId": "pca_projection_api_v1_analytics_pca_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "components",
+            "required": false,
+            "schema": {
+              "default": 2,
+              "maximum": 3,
+              "minimum": 2,
+              "title": "Components",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PCAProjection"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Pca Projection",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/audio/predict": {
+      "post": {
+        "description": "Predict Parkinson's directly from an audio file with strict validation.",
+        "operationId": "predict_audio_api_v1_audio_predict_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_predict_audio_api_v1_audio_predict_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Predict Audio",
+        "tags": [
+          "audio"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "description": "Validate credentials, return a JWT, and set an HttpOnly cookie.",
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "description": "Clear the admin cookie.",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "boolean"
+                  },
+                  "title": "Response Logout Api V1 Auth Logout Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Logout",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/batch/": {
+      "post": {
+        "description": "Accept a CSV upload and queue a batch prediction job.",
+        "operationId": "create_batch_api_v1_batch__post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_batch_api_v1_batch__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchJobCreated"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Batch",
+        "tags": [
+          "batch"
+        ]
+      }
+    },
+    "/api/v1/batch/{job_id}": {
+      "get": {
+        "operationId": "get_status_api_v1_batch__job_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchJobStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Status",
+        "tags": [
+          "batch"
+        ]
+      }
+    },
+    "/api/v1/batch/{job_id}/download": {
+      "get": {
+        "operationId": "download_result_api_v1_batch__job_id__download_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Download Result",
+        "tags": [
+          "batch"
+        ]
+      }
+    },
+    "/api/v1/explain/": {
+      "post": {
+        "description": "Takes the extracted acoustic features and the ensemble prediction probability,\nand returns a streaming Server-Sent Events (SSE) response containing a \nplain-English explanation generated by the LLM.",
+        "operationId": "explain_prediction_api_v1_explain__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExplainRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Stream AI explanation of prediction",
+        "tags": [
+          "explain",
+          "LLM Explainability"
+        ]
+      }
+    },
+    "/api/v1/feedback/": {
+      "post": {
+        "description": "Persist user feedback against a known prediction.\n\nThe `prediction_id` must reference an existing row \u2014 unknown ids return 404\ninstead of being silently accepted.",
+        "operationId": "submit_feedback_api_v1_feedback__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Submit Feedback",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/healthz": {
+      "get": {
+        "description": "Basic health check for load balancers.",
+        "operationId": "healthz_api_v1_healthz_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Healthz Api V1 Healthz Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Healthz",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/models": {
+      "get": {
+        "description": "Return every loaded model from the manifest (9 + future ensemble entry).",
+        "operationId": "list_models_api_v1_models_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Models Api V1 Models Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Models",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/v1/models/compare": {
+      "get": {
+        "description": "Side-by-side metric table across all loaded models.",
+        "operationId": "compare_models_api_v1_models_compare_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Compare Models Api V1 Models Compare Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Compare Models",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/v1/models/{name}/calibration": {
+      "get": {
+        "operationId": "calibration_api_v1_models__name__calibration_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "n_bins",
+            "required": false,
+            "schema": {
+              "default": 10,
+              "title": "N Bins",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Calibration Api V1 Models  Name  Calibration Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Calibration",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/v1/models/{name}/confusion-matrix": {
+      "get": {
+        "operationId": "confusion_matrix_api_v1_models__name__confusion_matrix_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Confusion Matrix Api V1 Models  Name  Confusion Matrix Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Confusion Matrix",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/v1/models/{name}/pr": {
+      "get": {
+        "operationId": "precision_recall_api_v1_models__name__pr_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Precision Recall Api V1 Models  Name  Pr Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Precision Recall",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/v1/models/{name}/roc": {
+      "get": {
+        "operationId": "roc_api_v1_models__name__roc_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Roc Api V1 Models  Name  Roc Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Roc",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/v1/predict/": {
+      "post": {
+        "description": "Predict Parkinson's from a 22-feature payload.",
+        "operationId": "predict_features_api_v1_predict__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Predict Features",
+        "tags": [
+          "predict"
+        ]
+      }
+    },
+    "/api/v1/predict/sample": {
+      "get": {
+        "description": "Return a randomly chosen row from the bundled dataset as a `VoiceFeatures` payload.",
+        "operationId": "predict_sample_api_v1_predict_sample_get",
+        "parameters": [
+          {
+            "description": "0 = healthy, 1 = Parkinson's, random = pick from either class",
+            "in": "query",
+            "name": "label",
+            "required": false,
+            "schema": {
+              "default": "random",
+              "description": "0 = healthy, 1 = Parkinson's, random = pick from either class",
+              "enum": [
+                "0",
+                "1",
+                "random"
+              ],
+              "title": "Label",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceFeatures"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Predict Sample",
+        "tags": [
+          "predict"
+        ]
+      }
+    },
+    "/metrics": {
+      "get": {
+        "description": "Endpoint that serves Prometheus metrics.",
+        "operationId": "metrics_metrics_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Metrics"
+      }
+    }
+  }
+}
