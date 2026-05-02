@@ -80,7 +80,15 @@ def create_app() -> FastAPI:
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
-        response.headers["Content-Security-Policy"] = "default-src 'self'"
+        
+        # In production, we need to allow the frontend origin to talk to the API
+        csp_origin = settings.PUBLIC_BASE_URL
+        response.headers["Content-Security-Policy"] = (
+            f"default-src 'self' {csp_origin}; "
+            f"connect-src 'self' {csp_origin} http://18.222.55.168:8000 http://localhost:8000; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval';"
+        )
         return response
 
     # Observability
