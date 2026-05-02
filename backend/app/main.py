@@ -83,9 +83,12 @@ def create_app() -> FastAPI:
         
         # In production, we need to allow the frontend origin to talk to the API
         csp_origin = settings.PUBLIC_BASE_URL
+        # Extract the base domain/IP for the connect-src (port 8000)
+        api_origin = csp_origin.replace(":5173", ":8000")
+        
         response.headers["Content-Security-Policy"] = (
             f"default-src 'self' {csp_origin}; "
-            f"connect-src 'self' {csp_origin} http://18.222.55.168:8000 http://localhost:8000; "
+            f"connect-src 'self' {csp_origin} {api_origin} http://localhost:8000; "
             "style-src 'self' 'unsafe-inline'; "
             "script-src 'self' 'unsafe-inline' 'unsafe-eval';"
         )
