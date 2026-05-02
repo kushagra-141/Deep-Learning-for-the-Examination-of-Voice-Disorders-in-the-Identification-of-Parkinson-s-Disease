@@ -1,63 +1,39 @@
 # syntax=docker/dockerfile:1.4
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Stage 1: Build
+# Single-stage build to minimize disk usage during build on small EC2 instances
 # ──────────────────────────────────────────────────────────────────────────────
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.11-slim-bookworm
 
-# Install system dependencies required for native extensions (numpy, parselmouth, etc.)
+# 1. Install system dependencies (build + runtime)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     libffi-dev \
     libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set up virtual environment
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Upgrade pip and install build tools
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel build
-
-# Set working directory
-WORKDIR /app
-
-# Copy the dependency specification
-COPY pyproject.toml README.md ./
-COPY app ./app
-COPY alembic ./alembic
-COPY alembic.ini ./
-
-# Build the wheel and install dependencies
-RUN pip install --no-cache-dir .
-
-# ──────────────────────────────────────────────────────────────────────────────
-# Stage 2: Runtime (Slim)
-# ──────────────────────────────────────────────────────────────────────────────
-FROM python:3.11-slim-bookworm
-
-# Install runtime system dependencies (util-linux for lscpu, libgomp1 for OpenMP)
-RUN apt-get update && apt-get install -y --no-install-recommends \
     util-linux \
     libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# 2. Set working directory
 WORKDIR /app
 
-# Copy virtual environment from builder
-COPY --from=builder /opt/venv /opt/venv
+# 3. Copy only dependency files first to leverage cache
+COPY pyproject.toml README.md ./
 
-# Copy migrations and prestart script
-COPY --from=builder /app/alembic /app/alembic
-COPY --from=builder /app/alembic.ini /app/alembic.ini
+# 4. Install dependencies directly into system python (no venv to save space)
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir .
+
+# 5. Copy the rest of the app
+COPY app ./app
+COPY alembic ./alembic
+COPY alembic.ini ./
 COPY prestart.sh ./prestart.sh
 RUN chmod +x ./prestart.sh
 
-# Set environment variables
-ENV PATH="/opt/venv/bin:$PATH"
-ENV PYTHONPATH="/opt/venv/lib/python3.11/site-packages:/app"
+# 6. Set environment variables
+ENV PYTHONPATH="/app"
 ENV PYTHONUNBUFFERED=1
 ENV APP_ENV=prod
 ENV MODELS_DIR="/app/models"
