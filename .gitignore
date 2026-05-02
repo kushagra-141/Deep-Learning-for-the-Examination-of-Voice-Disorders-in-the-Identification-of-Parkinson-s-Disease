@@ -83,6 +83,7 @@ infra/terraform/terraform.tfstate.backup
 !*.tfvars.example
 
 # ── Misc ──────────────────────────────────────────────────────────────────────
+.claude/
 *.bak
 *.orig
 *.tmp

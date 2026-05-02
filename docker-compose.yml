@@ -10,13 +10,13 @@ services:
     container_name: parkinsons_api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
       - APP_ENV=prod
       - REDIS_URL=redis://redis:6379/0
       - PUBLIC_BASE_URL=http://localhost:5173
       - DATABASE_URL=sqlite+aiosqlite:///./data/prod.db
-      # Add LLM API Keys below if testing streaming locally via compose
-      # - GROQ_API_KEY=your_key_here 
     depends_on:
       - redis
     volumes:
