@@ -27,7 +27,8 @@ def extract_features_from_audio(path: str, *, target_sr: int = 22_050) -> dict[s
 
     logger.info("audio_extraction_start", path=path)
     
-    y, sr = librosa.load(path, sr=target_sr, mono=True)
+    # Trim to 10 seconds to prevent OOM/Timeouts on slow EC2 instances
+    y, sr = librosa.load(path, sr=target_sr, mono=True, duration=10.0)
     logger.info("audio_loaded", duration=len(y)/sr, sr=sr)
     
     snd = parselmouth.Sound(y, sr)
