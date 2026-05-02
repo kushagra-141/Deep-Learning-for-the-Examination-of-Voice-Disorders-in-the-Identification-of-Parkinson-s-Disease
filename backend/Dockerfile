@@ -10,7 +10,7 @@ WORKDIR /app
 # Copy only dependency files first
 COPY pyproject.toml README.md ./
 
-# Install build tools, build the app, and PURGE build tools in a single layer
+# Install build tools, audio libraries, and PURGE build tools in a single layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libssl-dev \
     util-linux \
     libgomp1 \
+    ffmpeg \
+    libsndfile1 \
     && pip install --no-cache-dir --upgrade pip setuptools wheel \
     && pip install --no-cache-dir . \
     && apt-get purge -y build-essential cmake libffi-dev libssl-dev \

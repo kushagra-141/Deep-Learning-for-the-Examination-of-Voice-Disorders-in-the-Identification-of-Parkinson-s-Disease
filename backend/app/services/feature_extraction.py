@@ -14,7 +14,10 @@ try:
 except ImportError:
     HAVE_PARSELMOUTH = False
 
+import structlog
 from app.services.nonlinear import d2, dfa, ppe, rpde, spread1, spread2
+
+logger = structlog.get_logger(__name__)
 
 
 def extract_features_from_audio(path: str, *, target_sr: int = 22_050) -> dict[str, float]:
@@ -22,10 +25,15 @@ def extract_features_from_audio(path: str, *, target_sr: int = 22_050) -> dict[s
     if not HAVE_PARSELMOUTH:
         raise RuntimeError("parselmouth is not installed. Please install praat-parselmouth.")
 
+    logger.info("audio_extraction_start", path=path)
+    
     y, sr = librosa.load(path, sr=target_sr, mono=True)
+    logger.info("audio_loaded", duration=len(y)/sr, sr=sr)
+    
     snd = parselmouth.Sound(y, sr)
     pitch = snd.to_pitch(time_step=0.01, pitch_floor=75, pitch_ceiling=600)
     pp = call(snd, "To PointProcess (periodic, cc)", 75, 600)
+    logger.info("praat_objects_created")
 
     # ── Frequency ──
     fo = call(pitch, "Get mean", 0, 0, "Hertz")
@@ -47,12 +55,16 @@ def extract_features_from_audio(path: str, *, target_sr: int = 22_050) -> dict[s
     apq = call([snd, pp], "Get shimmer (apq11)", 0, 0, 0.0001, 0.02, 1.3, 1.6)
     dda = call([snd, pp], "Get shimmer (dda)", 0, 0, 0.0001, 0.02, 1.3, 1.6)
 
+    logger.info("shimmer_done")
+
     # ── Harmonicity ──
     harmonicity = snd.to_harmonicity_cc()
     hnr = call(harmonicity, "Get mean", 0, 0)
     nhr = 1 / (10 ** (hnr / 10) + 1e-9)  # approximate conversion
+    logger.info("harmonicity_done")
 
     # ── Nonlinear (Stubs/Estimates for MVP) ──
+    logger.info("nonlinear_start")
     nl = {
         "RPDE": rpde(y, sr),
         "DFA": dfa(y),
@@ -61,6 +73,7 @@ def extract_features_from_audio(path: str, *, target_sr: int = 22_050) -> dict[s
         "D2": d2(y),
         "PPE": ppe(pitch),
     }
+    logger.info("nonlinear_done")
 
     return {
         "MDVP:Fo(Hz)": fo,
