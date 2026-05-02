@@ -40,6 +40,9 @@ def dfa(y: np.ndarray) -> float:
     try:
         # Compute the DFA scaling exponent
         signal = y.astype(np.float64)
+        # Limit to 4096 samples for speed on slow CPUs
+        n_max = 4096
+        signal = signal[:n_max]
         # Integrate the signal
         cumsum = np.cumsum(signal - signal.mean())
         n = len(cumsum)

@@ -15,6 +15,7 @@ except ImportError:
     HAVE_PARSELMOUTH = False
 
 import structlog
+import time
 from app.services.nonlinear import d2, dfa, ppe, rpde, spread1, spread2
 
 logger = structlog.get_logger(__name__)
@@ -66,6 +67,8 @@ def extract_features_from_audio(path: str, *, target_sr: int = 22_050) -> dict[s
 
     # ── Nonlinear (Stubs/Estimates for MVP) ──
     logger.info("nonlinear_start")
+    t_start = time.time()
+    
     nl = {
         "RPDE": rpde(y, sr),
         "DFA": dfa(y),
@@ -74,7 +77,7 @@ def extract_features_from_audio(path: str, *, target_sr: int = 22_050) -> dict[s
         "D2": d2(y),
         "PPE": ppe(pitch),
     }
-    logger.info("nonlinear_done")
+    logger.info("nonlinear_done", elapsed=time.time() - t_start)
 
     return {
         "MDVP:Fo(Hz)": fo,
