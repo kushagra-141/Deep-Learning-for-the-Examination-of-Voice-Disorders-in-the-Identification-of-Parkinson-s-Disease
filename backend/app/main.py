@@ -18,11 +18,14 @@ from app.routers import (
     audio,
     auth,
     batch,
+    chat,
+    explain,
     feedback,
     health,
+    help as help_router,
     models,
     predict,
-    explain,
+    predictions,
 )
 
 
@@ -95,6 +98,9 @@ def create_app() -> FastAPI:
     app.include_router(auth.router, prefix=f"{p}/auth", tags=["auth"])
     app.include_router(admin.router, prefix=f"{p}/admin", tags=["admin"])
     app.include_router(explain.router, prefix=f"{p}/explain", tags=["explain"])
+    app.include_router(chat.router, prefix=f"{p}/chat", tags=["llm-chat"])
+    app.include_router(help_router.router, prefix=f"{p}/help", tags=["llm-help"])
+    app.include_router(predictions.router, prefix=f"{p}/predictions", tags=["llm-narrate"])
 
     return app
 

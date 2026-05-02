@@ -7,6 +7,8 @@ import { Activity } from "lucide-react";
 const NAV_ITEMS = [
   { name: "Predict", path: "/predict" },
   { name: "Audio", path: "/audio" },
+  { name: "Batch", path: "/batch" },
+  { name: "Explorer", path: "/explorer" },
   { name: "Dashboard", path: "/dashboard" },
   { name: "About", path: "/about" },
 ];

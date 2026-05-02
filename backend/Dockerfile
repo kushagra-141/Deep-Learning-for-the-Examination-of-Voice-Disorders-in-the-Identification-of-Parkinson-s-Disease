@@ -49,9 +49,11 @@ WORKDIR /app
 # Copy virtual environment from builder
 COPY --from=builder /opt/venv /opt/venv
 
-# Copy migrations so they can be run in the distroless container
+# Copy migrations and prestart script
 COPY --from=builder /app/alembic /app/alembic
 COPY --from=builder /app/alembic.ini /app/alembic.ini
+COPY prestart.sh ./prestart.sh
+RUN chmod +x ./prestart.sh
 
 # Set environment variables
 ENV PATH="/opt/venv/bin:$PATH"
@@ -65,5 +67,5 @@ ENV UPLOAD_DIR="/app/data/uploads"
 # Expose port
 EXPOSE 8000
 
-# Run the application via Uvicorn
-CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+# Run the application via prestart script
+CMD ["./prestart.sh"]

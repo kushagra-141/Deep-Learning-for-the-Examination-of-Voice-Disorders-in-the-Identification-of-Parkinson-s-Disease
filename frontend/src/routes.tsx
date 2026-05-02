@@ -9,6 +9,8 @@ const PredictPage = lazy(() => import("./pages/PredictPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const AudioPage = lazy(() => import("./pages/AudioPage"));
+const BatchPage = lazy(() => import("./pages/BatchPage"));
+const ExplorerPage = lazy(() => import("./pages/ExplorerPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 // Global fallback for lazy routes
@@ -61,6 +63,22 @@ export function AppRoutes() {
           element={
             <Suspense fallback={<PageFallback />}>
               <AudioPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/batch"
+          element={
+            <Suspense fallback={<PageFallback />}>
+              <BatchPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/explorer"
+          element={
+            <Suspense fallback={<PageFallback />}>
+              <ExplorerPage />
             </Suspense>
           }
         />

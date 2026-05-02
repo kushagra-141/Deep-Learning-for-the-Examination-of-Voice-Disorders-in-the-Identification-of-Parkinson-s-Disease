@@ -1,0 +1,1 @@
+I can't give medical advice or diagnostic statements. This tool is a research demonstration and is not a clinical device. Please consult a qualified neurologist for any health concern. The disclaimer at the bottom of the page explains the model's intended use and limitations.

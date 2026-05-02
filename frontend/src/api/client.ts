@@ -358,6 +358,32 @@ export const getAdminAuditLog = (cursor?: string, limit = 100) => {
   return request<PaginatedPage<AdminAuditRow>>(`/admin/audit-log?${qs}`);
 };
 
+// ── LLM help + narrate ──────────────────────────────────────────────────────
+
+export interface HelpResponse {
+  answer: string;
+  used_corpus: boolean;
+}
+
+export const askHelp = (question: string) =>
+  request<HelpResponse>("/help/", {
+    method: "POST",
+    body: JSON.stringify({ question }),
+  });
+
+export interface NarrateResponse {
+  prediction_id: string;
+  narrative: string;
+  model: string | null;
+  generated_at: string | null;
+  cached: boolean;
+}
+
+export const getOrCreateNarrative = (predictionId: string) =>
+  request<NarrateResponse>(`/predictions/${encodeURIComponent(predictionId)}/narrate`, {
+    method: "POST",
+  });
+
 // ── LLM streaming (unchanged) ───────────────────────────────────────────────
 
 export async function* streamExplanation(

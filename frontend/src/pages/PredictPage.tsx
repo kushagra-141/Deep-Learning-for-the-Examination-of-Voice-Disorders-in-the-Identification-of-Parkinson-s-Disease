@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Loader2, Zap, FlaskConical, BarChart2, ChevronRight, AlertTriangle, SlidersHorizontal, Sparkles } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Loader2, Zap, FlaskConical, BarChart2, ChevronRight, AlertTriangle, SlidersHorizontal, MessageSquare } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -11,7 +11,14 @@ import { Badge } from "../components/ui/badge";
 import { usePrediction } from "../hooks/usePrediction";
 import { WhatIfDrawer } from "../components/prediction/WhatIfDrawer";
 import { LLMExplanation } from "../components/prediction/LLMExplanation";
-import { getPredictSample, type ShapContribution } from "../api/client";
+import { ShapWaterfall } from "../components/prediction/ShapWaterfall";
+import { ShareLinkButton } from "../components/prediction/ShareLinkButton";
+import { DownloadReportButton } from "../components/prediction/DownloadReportButton";
+import { RecentList } from "../components/common/RecentList";
+import { ChatSidebar } from "../components/llm/ChatSidebar";
+import { getPredictSample } from "../api/client";
+import { readShareFromLocation } from "../lib/share";
+import { useRecentPredictions, riskFromProbability } from "../stores/recent";
 
 const FEATURE_GROUPS = [
   {
@@ -57,88 +64,49 @@ function getRiskLevel(prob: number) {
   return { label: "Low Risk", color: "success", barColor: "bg-success", textColor: "text-success", bg: "bg-success/5" };
 }
 
-function ShapTopPanel({
-  contributions,
-  primaryModel,
-}: {
-  contributions: ShapContribution[];
-  primaryModel: string;
-}) {
-  // Normalize bar widths against the largest |shap| in this list.
-  const maxAbs = Math.max(...contributions.map((c) => Math.abs(c.shap)), 1e-9);
-  return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-          <Sparkles className="h-3 w-3 text-primary" />
-          Top Contributors
-          <Badge variant="outline" className="ml-auto text-[10px] font-mono normal-case">
-            {primaryModel.replace(/_/g, " ")}
-          </Badge>
-        </CardTitle>
-        <CardDescription className="text-xs">
-          Features pushing the prediction most strongly toward (red) or away from (green) Parkinson's.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        {contributions.map((c, i) => {
-          const pct = (Math.abs(c.shap) / maxAbs) * 100;
-          const positive = c.shap >= 0;
-          return (
-            <motion.div
-              key={c.feature}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.05 + i * 0.04 }}
-              className="grid grid-cols-[7rem_1fr_3.5rem] items-center gap-2"
-            >
-              <span className="text-xs font-mono text-muted-foreground truncate" title={c.feature}>
-                {c.feature}
-              </span>
-              <div className="flex items-center">
-                <div className="flex-1 flex justify-end">
-                  {!positive && (
-                    <motion.div
-                      className="h-2 rounded-l-full bg-success"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${pct}%` }}
-                      transition={{ duration: 0.5, delay: 0.1 + i * 0.04 }}
-                    />
-                  )}
-                </div>
-                <div className="w-px h-3 bg-border mx-1" />
-                <div className="flex-1">
-                  {positive && (
-                    <motion.div
-                      className="h-2 rounded-r-full bg-destructive"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${pct}%` }}
-                      transition={{ duration: 0.5, delay: 0.1 + i * 0.04 }}
-                    />
-                  )}
-                </div>
-              </div>
-              <span
-                className={`text-[11px] font-mono font-bold text-right ${positive ? "text-destructive" : "text-success"}`}
-              >
-                {positive ? "+" : ""}
-                {c.shap.toFixed(2)}
-              </span>
-            </motion.div>
-          );
-        })}
-      </CardContent>
-    </Card>
-  );
-}
-
 export default function PredictPage() {
   const { mutate: predict, isPending, data, error, reset: resetMutation } = usePrediction();
-  const { register, handleSubmit, reset } = useForm<Record<string, number>>();
+  const { register, handleSubmit, reset, getValues } = useForm<Record<string, number>>();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [lastSubmitted, setLastSubmitted] = useState<Record<string, number>>({});
   const [sampleLoading, setSampleLoading] = useState(false);
   const [sampleError, setSampleError] = useState<string | null>(null);
+  const addRecent = useRecentPredictions((s) => s.add);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const sharePrefillApplied = useRef(false);
+
+  // Share-link prefill: ?q=<encoded> populates the form; ?auto=1 also re-submits.
+  useEffect(() => {
+    if (sharePrefillApplied.current) return;
+    const incoming = readShareFromLocation(location.search);
+    if (!incoming) return;
+    sharePrefillApplied.current = true;
+    reset(incoming.payload.features);
+    if (incoming.autoSubmit) {
+      predict(incoming.payload.features);
+      setLastSubmitted(incoming.payload.features);
+    }
+    // Strip query so a refresh doesn't re-submit forever.
+    navigate("/predict", { replace: true });
+  }, [location.search, navigate, predict, reset]);
+
+  // Persist successful predictions to the recent-list store.
+  useEffect(() => {
+    if (!data) return;
+    addRecent({
+      predictionId: data.prediction_id,
+      createdAt: data.created_at,
+      probability: data.ensemble.probability,
+      riskLabel: riskFromProbability(data.ensemble.probability),
+      inputMode: "manual",
+      features: lastSubmitted,
+      primaryModel: data.primary_model,
+    });
+    // Only fire once per new prediction_id.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.prediction_id]);
 
   const onSubmit = (formData: Record<string, number>) => {
     const numericFeatures: Record<string, number> = {};
@@ -148,6 +116,27 @@ export default function PredictPage() {
     setLastSubmitted(numericFeatures);
     predict(numericFeatures);
   };
+
+  const handleRestoreRecent = (entry: { features: Record<string, number> }) => {
+    reset(entry.features);
+    resetMutation();
+    setLastSubmitted({});
+  };
+
+  // Suppress unused warning while still typing this for future use.
+  void getValues;
+
+  // Cmd/Ctrl+K opens the chat sidebar when a result is available.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k" && data) {
+        e.preventDefault();
+        setChatOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [data]);
 
   const loadSample = async () => {
     setSampleLoading(true);
@@ -338,9 +327,9 @@ export default function PredictPage() {
                   </CardContent>
                 </Card>
 
-                {/* Top contributors (SHAP) */}
+                {/* SHAP waterfall — top contributors with toggle to show all 22 */}
                 {data.ensemble.shap_top && data.ensemble.shap_top.length > 0 && (
-                  <ShapTopPanel
+                  <ShapWaterfall
                     contributions={data.ensemble.shap_top}
                     primaryModel={data.primary_model}
                   />
@@ -400,14 +389,38 @@ export default function PredictPage() {
                   Explore What-If Scenarios
                 </Button>
 
-                <LLMExplanation 
-                  features={lastSubmitted} 
-                  probability={data.ensemble.probability} 
-                  inputMode="manual" 
+                {/* Chat / Share / Download row */}
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setChatOpen(true)}
+                >
+                  <MessageSquare className="h-4 w-4 mr-2 text-primary" />
+                  Discuss this result
+                  <span className="ml-auto text-[10px] font-mono text-muted-foreground">⌘K</span>
+                </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <ShareLinkButton
+                    features={lastSubmitted}
+                    probability={data.ensemble.probability}
+                  />
+                  <DownloadReportButton
+                    prediction={data}
+                    features={lastSubmitted}
+                  />
+                </div>
+
+                <LLMExplanation
+                  features={lastSubmitted}
+                  probability={data.ensemble.probability}
+                  inputMode="manual"
                 />
               </motion.div>
             ) : null}
           </AnimatePresence>
+
+          {/* Recent predictions — always visible below the result column */}
+          <RecentList onRestore={handleRestoreRecent} />
         </div>
       </div>
 
@@ -419,6 +432,17 @@ export default function PredictPage() {
             onOpenChange={setDrawerOpen}
             baseline={lastSubmitted}
             onApply={handleApplyFromDrawer}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Chat Sidebar */}
+      <AnimatePresence>
+        {chatOpen && data && (
+          <ChatSidebar
+            open={chatOpen}
+            onOpenChange={setChatOpen}
+            prediction={data}
           />
         )}
       </AnimatePresence>

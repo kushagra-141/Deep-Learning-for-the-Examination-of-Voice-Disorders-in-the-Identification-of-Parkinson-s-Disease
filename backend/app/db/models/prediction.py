@@ -4,7 +4,7 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 
-from sqlalchemy import DateTime, ForeignKey, JSON, String
+from sqlalchemy import DateTime, ForeignKey, JSON, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -28,6 +28,13 @@ class Prediction(Base):
     )
     client_fingerprint: Mapped[str | None] = mapped_column(String(64), nullable=True)
     user_consent: Mapped[str] = mapped_column(String(32), default="none")
+
+    # P3.5-10: cached LLM-generated narrator paragraph for the PDF report.
+    narrative: Mapped[str | None] = mapped_column(Text, nullable=True)
+    narrative_model: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    narrative_generated_at: Mapped[dt.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True,
+    )
 
     model_predictions: Mapped[list["ModelPrediction"]] = relationship(
         back_populates="prediction", cascade="all, delete-orphan"

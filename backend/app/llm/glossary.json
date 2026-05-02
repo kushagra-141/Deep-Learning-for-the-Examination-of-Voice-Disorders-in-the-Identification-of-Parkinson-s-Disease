@@ -1,0 +1,134 @@
+{
+  "MDVP:Fo(Hz)": {
+    "definition": "Average fundamental frequency of the voice — the perceived pitch.",
+    "unit": "Hz",
+    "normal_range_adult": "85–255 Hz (adult typical range; varies by age and sex).",
+    "interpretation": "Markedly low or unusually variable Fo can correlate with vocal-fold instability."
+  },
+  "MDVP:Fhi(Hz)": {
+    "definition": "Maximum fundamental frequency observed in the recording.",
+    "unit": "Hz",
+    "normal_range_adult": "Highly speaker-dependent; the dataset's 10th–90th percentile is 118–320 Hz.",
+    "interpretation": "Used together with Fo and Flo to characterise pitch range."
+  },
+  "MDVP:Flo(Hz)": {
+    "definition": "Minimum fundamental frequency observed in the recording.",
+    "unit": "Hz",
+    "normal_range_adult": "Speaker-dependent; the dataset's 10th–90th percentile is 70–186 Hz.",
+    "interpretation": "Restricted pitch floor combined with low Fo can point to creaky/strained phonation."
+  },
+  "MDVP:Jitter(%)": {
+    "definition": "Cycle-to-cycle variation of fundamental frequency, expressed as a percentage of the average period.",
+    "unit": "%",
+    "normal_range_adult": "Healthy voices typically <0.5% (varies by methodology).",
+    "interpretation": "High jitter indicates pitch instability."
+  },
+  "MDVP:Jitter(Abs)": {
+    "definition": "Absolute (microsecond) cycle-to-cycle variation of fundamental period.",
+    "unit": "seconds",
+    "normal_range_adult": "Typically <50 microseconds in healthy voices.",
+    "interpretation": "Same construct as MDVP:Jitter(%) but in absolute time units."
+  },
+  "MDVP:RAP": {
+    "definition": "Relative Average Perturbation — three-period jitter smoothing.",
+    "unit": "ratio",
+    "normal_range_adult": "Healthy voices typically <0.005.",
+    "interpretation": "Reduces sensitivity to single-cycle artefacts."
+  },
+  "MDVP:PPQ": {
+    "definition": "Five-point Period Perturbation Quotient — five-period jitter smoothing.",
+    "unit": "ratio",
+    "normal_range_adult": "Healthy voices typically <0.005.",
+    "interpretation": "Smoother estimator of pitch perturbation than raw jitter."
+  },
+  "Jitter:DDP": {
+    "definition": "Average absolute difference of differences between consecutive periods.",
+    "unit": "ratio",
+    "normal_range_adult": "≈ 3× MDVP:RAP by construction.",
+    "interpretation": "Captures higher-order jitter patterns."
+  },
+  "MDVP:Shimmer": {
+    "definition": "Cycle-to-cycle variation in amplitude (loudness).",
+    "unit": "ratio",
+    "normal_range_adult": "Healthy voices typically <0.04.",
+    "interpretation": "High shimmer often co-occurs with breathiness or hoarseness."
+  },
+  "MDVP:Shimmer(dB)": {
+    "definition": "Cycle-to-cycle amplitude variation expressed in decibels.",
+    "unit": "dB",
+    "normal_range_adult": "Healthy voices typically <0.35 dB.",
+    "interpretation": "Same construct as MDVP:Shimmer but in dB units."
+  },
+  "Shimmer:APQ3": {
+    "definition": "Three-point Amplitude Perturbation Quotient — three-period amplitude smoothing.",
+    "unit": "ratio",
+    "normal_range_adult": "Healthy voices typically <0.02.",
+    "interpretation": "Reduces sensitivity to single-cycle amplitude artefacts."
+  },
+  "Shimmer:APQ5": {
+    "definition": "Five-point Amplitude Perturbation Quotient — five-period amplitude smoothing.",
+    "unit": "ratio",
+    "normal_range_adult": "Healthy voices typically <0.02.",
+    "interpretation": "Smoother estimator of amplitude perturbation."
+  },
+  "MDVP:APQ": {
+    "definition": "Eleven-point Amplitude Perturbation Quotient.",
+    "unit": "ratio",
+    "normal_range_adult": "Healthy voices typically <0.03.",
+    "interpretation": "Long-window amplitude perturbation estimator."
+  },
+  "Shimmer:DDA": {
+    "definition": "Average absolute difference of differences between amplitudes of consecutive periods.",
+    "unit": "ratio",
+    "normal_range_adult": "≈ 3× Shimmer:APQ3 by construction.",
+    "interpretation": "Higher-order amplitude perturbation."
+  },
+  "NHR": {
+    "definition": "Noise-to-Harmonics Ratio — fraction of signal energy attributable to noise.",
+    "unit": "ratio",
+    "normal_range_adult": "Healthy voices typically <0.10.",
+    "interpretation": "Higher NHR indicates a noisier, less harmonic voice."
+  },
+  "HNR": {
+    "definition": "Harmonics-to-Noise Ratio — clarity of voice in decibels.",
+    "unit": "dB",
+    "normal_range_adult": "Healthy voices typically >15 dB.",
+    "interpretation": "Lower HNR indicates more breathy or hoarse phonation."
+  },
+  "RPDE": {
+    "definition": "Recurrence Period Density Entropy — measure of how regular cyclic patterns are.",
+    "unit": "dimensionless (0–1)",
+    "normal_range_adult": "Dataset 10th–90th percentile: 0.36–0.63.",
+    "interpretation": "Higher values suggest less periodic, more chaotic vocal cycles."
+  },
+  "DFA": {
+    "definition": "Detrended Fluctuation Analysis — scaling exponent of stochastic self-similarity.",
+    "unit": "dimensionless (0–1)",
+    "normal_range_adult": "Dataset 10th–90th percentile: 0.70–0.86.",
+    "interpretation": "Captures fractal-like structure of voice noise."
+  },
+  "spread1": {
+    "definition": "Nonlinear measure of fundamental-frequency variation (log-scaled).",
+    "unit": "dimensionless",
+    "normal_range_adult": "Dataset 10th–90th percentile: -7.4 to -3.6.",
+    "interpretation": "More negative = lower variation."
+  },
+  "spread2": {
+    "definition": "Second nonlinear measure of fundamental-frequency variation.",
+    "unit": "dimensionless",
+    "normal_range_adult": "Dataset 10th–90th percentile: 0.08–0.45.",
+    "interpretation": "Higher values associated with more variability."
+  },
+  "D2": {
+    "definition": "Correlation dimension — geometric complexity of the voice signal in phase space.",
+    "unit": "dimensionless",
+    "normal_range_adult": "Dataset 10th–90th percentile: 1.9–3.1.",
+    "interpretation": "Higher D2 suggests more complex, less periodic dynamics."
+  },
+  "PPE": {
+    "definition": "Pitch Period Entropy — entropy of the residual pitch signal after detrending.",
+    "unit": "dimensionless",
+    "normal_range_adult": "Dataset 10th–90th percentile: 0.08–0.45.",
+    "interpretation": "Often the single strongest feature for this dataset; high PPE indicates erratic pitch."
+  }
+}
