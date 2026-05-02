@@ -68,9 +68,7 @@ desktop.ini
 .settings/
 
 # ── ML artefacts ──────────────────────────────────────────────────────────────
-# Trained model files are committed only from CI artifacts; local runs go here
-backend/models/*.joblib
-backend/models/manifest.json
+# Trained model files
 backend/data/*.db
 backend/data/uploads/
 !backend/data/parkinsons.data
