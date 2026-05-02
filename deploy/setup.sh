@@ -14,6 +14,9 @@ sudo apt-get upgrade -y
 
 # 2. Install Docker
 echo "Installing Docker..."
+# Remove conflicting pre-installed packages
+sudo apt-get remove -y docker-compose-v2
+
 sudo apt-get install -y \
     ca-certificates \
     curl \
