@@ -50,9 +50,3 @@ backend/
 ├── data/              # Bundled dataset (parkinsons.data)
 └── models/            # Trained model artifacts (populated by scripts/train.py)
 ```
-
-## See Also
-
-- [Architecture Overview](../docs/01_HLD.md)
-- [Backend LLD](../docs/02_BACKEND_LLD.md)
-- [Execution Roadmap](../docs/05_EXECUTION_ROADMAP.md)

@@ -13,7 +13,6 @@ class GroqProvider(OpenAICompatProvider):
             api_key=api_key,
             base_url=GROQ_BASE_URL,
             timeout_s=timeout_s,
-            # Honour Groq's "do not retain prompts for training" header. See
-            # docs/06_LLM_INTEGRATION_LLD.md §6.9.
+            # Honour Groq's "do not retain prompts for training" header.
             extra_headers={"x-groq-retention": "off"},
         )

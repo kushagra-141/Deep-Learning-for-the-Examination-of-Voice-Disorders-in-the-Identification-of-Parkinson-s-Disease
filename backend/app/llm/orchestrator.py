@@ -1,7 +1,6 @@
-"""P3.5-07: Chat orchestrator.
+"""Chat orchestrator.
 
-Drives the stream → tool-call → execute → resume loop described in
-``docs/06_LLM_INTEGRATION_LLD.md`` §6.5.5.
+Drives the stream → tool-call → execute → resume loop.
 
 Flow per user turn:
 
